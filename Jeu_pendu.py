@@ -1,35 +1,28 @@
-from operator import indexOf
-import random
+import random  # permet de générer des choix aléatoires
 
-mots_possibles = ["chocolat", "montagne", "ordinateur", "girafe", "aventure", "fantome", "volcan", "pirate", "bibliotheque", "arcenciel", "dragon", "horloge", "foret", "fusee", "mystere"]
+mots_possibles = ["abeille", "cabaret", "capable", "changer", "chemine", "costume", "courage", "eclipse", "famille", "girafon", "horizon", "journal", "lumiere", "machine", "mystere", "oiseaux", "panneau", "silence", "banquet", "barrage", "branche", "contact", "lecture", "paysage", "planete", "poisson", "symbole", "travail", "village", "fenetre"]
 lettres_essayees = []
 vies = 7
-mot_choisi = mots_possibles[random.randint(0, len(mots_possibles) - 1)]
-mot_choisi_supp = list(mot_choisi)
+mot_choisi = random.choice(mots_possibles)
 mot_choisi = list(mot_choisi)
-print(mot_choisi)
-mot_devine = []
-for letter in mot_choisi:
-    mot_devine.append("_")
+mot_devine = ["_"] * len(mot_choisi)
 
-while vies > 0 and mot_choisi != mot_devine:
+while vies > 0 and "_" in mot_devine:  # boucle principale du jeu
     print(f"\n Vies = {vies} \n ")
-    print(f" {mot_devine} \n") #"" à enlever
-    print(f"Lettres essayées = {lettres_essayees} \n")
-    essai = input("Quelle lettre veux-tu essayer ? \n").strip().lower()
-    if len(essai) != 1:
-        print("Erreur : nombre de caractères attendus est mauvais \n")
-    elif essai in lettres_essayees:
+    print(" ".join(mot_devine) + "\n")
+    print("Lettres essayées : " + ", ".join(lettres_essayees) + "\n")
+    essai = input("Quelle lettre veux-tu essayer ? ").strip().lower()  # saisie de la lettre proposée par le joueur
+    if len(essai) != 1:  # vérifie que l'utilisateur entre bien une seule lettre
+        print("Erreur : le nombre de caractères attendus est mauvais \n")
+    elif essai in lettres_essayees:  # vérifie si la lettre a déjà été proposée
         print("Lettre déjà essayée \n")
-    elif essai in mot_choisi:
+    elif essai in mot_choisi:  # vérifie si la lettre est présente dans le mot à deviner
         print(f"Bravo {essai} est bien dans le mot ! \n")
-        for lettre in mot_choisi_supp: # plusieurs occurences à régler
+        for i, lettre in enumerate(mot_choisi):
             if lettre == essai:
-                mot_devine[indexOf(mot_choisi_supp, lettre)] = essai ###### ici probleme occurence
-                mot_choisi_supp[indexOf(mot_choisi_supp, lettre)] = "."
-                print(mot_choisi)
+                mot_devine[i] = essai
         lettres_essayees.append(essai)
-    elif essai not in mot_choisi:
+    elif essai not in mot_choisi:  # cas où la lettre n'est pas dans le mot
         print(f"Dommage {essai} n'est pas dans le mot... \n")
         vies -= 1
         lettres_essayees.append(essai)
@@ -37,8 +30,9 @@ while vies > 0 and mot_choisi != mot_devine:
         print("Erreur : je ne comprends pas \n")
 
 if vies == 0:
-    print("Dommage, vous aurez plus de chance la prochaine fois... \n")
+    print(f"Dommage, le mot était : {''.join(mot_choisi)}\n")
 elif vies == 1:
-    print(f"Bravo tu as trouvé le mot mystère avec {vies} vie restante \n")
+    print(f"Bravo, le mot mystère était bien {''.join(mot_choisi)}. Il te restait {vies} vie restante \n")   
 else:
-    print(f"Bravo tu as trouvé le mot mystère avec {vies} vies restantes \n")
+    print(f"Bravo, le mot mystère était bien {''.join(mot_choisi)}. Il te restait {vies} vies restantes \n")
+    
